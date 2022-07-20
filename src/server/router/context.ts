@@ -4,10 +4,9 @@ import * as trpcNext from "@trpc/server/adapters/next";
 import { NodeHTTPCreateContextFnOptions } from "@trpc/server/dist/declarations/src/adapters/node-http";
 import EventEmitter from "events";
 import { IncomingMessage } from "http";
-import { unstable_getServerSession as getServerSession } from "next-auth";
+import { getSession } from "next-auth/react";
 import ws from 'ws';
 
-import { authOptions as nextAuthOptions } from "../../pages/api/auth/[...nextauth]";
 import { prisma } from "../db/client";
 
 const ee = new EventEmitter()
@@ -19,7 +18,7 @@ export const createContext = async (
   const res = opts?.res;
 
   const session =
-    req && res && (await getServerSession(req, res, nextAuthOptions));
+    req && res && (await getSession({req}));
 
   return {
     req,
